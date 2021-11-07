@@ -1,0 +1,76 @@
+{% load django_ledger %}
+{% load trans from i18n %}
+{% load static %}
+{% load cache %}
+{% load i18n %}
+{% now "Y" as current_year %}
+
+{% if style == 'desktop' %}
+
+        <aside class="menu has-background-grey-dark" >
+            <ul class="menu-list">
+                <br>
+                {% for link in links %}
+                    {% if link.type == 'link' %}
+                        <li class="p-1">
+
+                            <a href="{{ link.url }}" class="has-text-white-ter has-text-weight-normal" >{{ link.title }}</a>
+
+                        </li>
+                    {% elif link.type == 'links' %}
+                        <li class="p-1">
+                            <a class="has-text-white-ter has-text-weight-normal is-flex is-justify-content-space-between">{{ link.title }}<span class="icon">{% icon 'carbon:caret-right' 20  %}</span></a>
+                            <ul>
+                                {% for l in link.links %}
+                                    <li class="p-1">
+                                        <a class="has-text-white-ter has-text-weight-normal" href="{{ l.url }}">{{ l.title }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+            </ul>
+        </aside>
+<div id="info-card2" class="box nav-card2">
+    <div class="is-flex is-align-items-left is-flex-direction-column">
+
+    {% session_entity_slug as entity_slug %}
+    <a class="p-2" href="{% url 'django_ledger:invoice-create' entity_slug=entity_slug %}"><h2 class="subtitle is-6">Invoice</h2></a>
+    <a class="p-2" href="{% url 'django_ledger:bill-create' entity_slug=entity_slug %}"><h2 class="subtitle is-6">Bill</h2></a>
+    <a class="p-2" href="https://beachwoodfinancial.com"><h2 class="subtitle is-6">Credits</h2></a>
+    </div>
+</div>
+
+
+{# A menu that renders only on mobile devices when the burger menu is opened #}
+{% elif style == 'mobile' %}
+    <div class="navbar-start">
+        <div class="navbar-item has-text-weight-bold is-hidden-desktop">{{ entity.name | upper }}</div>
+        {% for link in links %}
+
+            {% if link.type == 'link' %}
+                <a class="navbar-item is-hidden-desktop"
+                   href="{{ link.url }}">{{ link.title }}</a>
+
+            {% elif link.type == 'links' %}
+                <div class="navbar-item has-dropdown is-hoverable is-hidden-desktop">
+                    <a class="navbar-link">{{ link.title }}</a>
+                    <div class="navbar-dropdown">
+
+                        {% for l in link.links %}
+                            <a class="navbar-item"
+                               href="{{ l.url }}">{{ l.title }}</a>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            {% endif %}
+
+        {% endfor %}
+    </div>
+
+
+
+{% endif %}

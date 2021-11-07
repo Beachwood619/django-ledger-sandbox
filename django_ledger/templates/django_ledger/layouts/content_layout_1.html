@@ -1,0 +1,29 @@
+{% extends 'django_ledger/base.html' %}
+{% load navigation_menu from django_ledger %}
+
+{% block content %}
+    <section class="section p-0">
+        <div class="container is-fluid px-1">
+            <div class="columns">
+
+                {# SIDE MENU #}
+                {% if not hide_menu %}
+                    <div class="column is-2 is-hidden-mobile is-hidden-tablet-only has-background-grey-dark mt-3">
+                        <div class="columns is-multiline has-background-grey-dark">
+
+                            <div class="column is-1.5 has-background-grey-dark">
+                                {% navigation_menu 'desktop' %}
+                            </div>
+                            {% block aux_menu %}{% endblock %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="column">
+                    {% block view_content %}{% endblock %}
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock content %}
